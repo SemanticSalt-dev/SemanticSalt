@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SemanticSalt</string>
+    <string name="plusString">+</string>
+    <string name="minusString">-</string>
 </resources>
