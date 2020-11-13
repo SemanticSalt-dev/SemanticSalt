@@ -1,5 +1,21 @@
 <resources>
-    <string name="app_name">SemanticSalt</string>
-    <string name="plusString">+</string>
-    <string name="minusString">-</string>
+    <string name="appName">High Life Cost Calculator</string>
+    <string-array name="greetings">
+        <item>Prove them wrong</item>
+        <item>Good vibes only!</item>
+        <item>Enjoy the little things</item>
+        <item>What\’s done is done</item>
+        <item>Don\'t give up</item>
+        <item>Just go for it</item>
+        <item>Damn you look good today</item>
+        <item>Choose the world you see</item>
+        <item>Go all out</item>
+        <item>You got this</item>
+    </string-array>
+    <string name="resetButton">Reset</string>
+    <string name="doTheMath">Calculate</string>
+    <string name="qty">Enter the quantity</string>
+    <string name="cost">Enter the total cost</string>
+    <string name="errorWarning">Math Error! No good!</string>
+    <string name="tooEasy">well that was easy..</string>
 </resources>
