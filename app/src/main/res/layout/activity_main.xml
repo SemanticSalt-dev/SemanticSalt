@@ -5,22 +5,43 @@
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:onClick="doSomeMath">
 
     <TextView
-        android:id="@+id/hi"
+        android:id="@+id/howMany"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="158dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="145dp"
+        android:hapticFeedbackEnabled="false"
         android:maxLines="1"
-        android:padding="10dp"
+        android:padding="16dp"
+        android:scrollHorizontally="false"
+        android:text="@string/how_many_can_you_do"
         android:textSize="36sp"
-        android:gravity="center_horizontal"
         app:autoSizeMaxTextSize="38sp"
         app:autoSizeMinTextSize="14sp"
         app:autoSizeTextType="uniform"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="How many can you do?" />
+
+    <TextView
+        android:id="@+id/theCount"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        app:autoSizeMaxTextSize="1000sp"
+        app:autoSizeMinTextSize="60sp"
+        android:maxLines="1"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/howMany" />
 
     <Button
         android:id="@+id/reset"
@@ -28,76 +49,57 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="5dp"
-        android:onClick="doSomethingMathish"
+        android:layout_marginTop="50dp"
+        app:autoSizeMaxTextSize="14sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeTextType="uniform"
+        android:onClick="doSomeMath"
         android:text="@string/resetButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/runCalculation"
+        android:id="@+id/add10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        app:autoSizeMaxTextSize="14sp"
+        app:autoSizeMinTextSize="10sp"
+        app:autoSizeTextType="uniform"
+        android:onClick="doSomeMath"
+        android:text="@string/add10Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/customEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
-        android:onClick="doSomethingMathish"
-        android:text="@string/doTheMath"
+        android:autofillHints="pushUpQtyLabel"
+        android:ems="4"
+        android:hint="@string/pushUpQtyLabel"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/qty"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/enterCustomButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:ems="10"
-        android:gravity="center_horizontal"
-        android:hint="@string/qty"
-        android:imeOptions="actionNext"
-        android:importantForAutofill="no"
-        android:inputType="number"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/reset"
-        tools:layout_editor_absoluteX="96dp" />
-
-    <EditText
-        android:id="@+id/cost"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:ems="10"
-        android:gravity="center_horizontal"
-        android:hint="@string/cost"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="numberDecimal"
-        android:textSize="24sp"
-        app:layout_constraintTop_toBottomOf="@+id/reset"
-        tools:layout_editor_absoluteX="96dp" />
-
-    <TextView
-        android:id="@+id/costLine"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="230dp"
-        android:gravity="center_horizontal"
-        android:maxLines="1"
-        android:textSize="36sp"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="110dp"
+        app:autoSizeMaxTextSize="14sp"
+        app:autoSizeMinTextSize="10sp"
         app:autoSizeTextType="uniform"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/costLine2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="280dp"
-        android:gravity="center_horizontal"
-        android:maxLines="1"
-        android:textSize="36sp"
-        app:autoSizeTextType="uniform"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:onClick="doSomeMath"
+        android:text="@string/enterCustomButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginEnd="110dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

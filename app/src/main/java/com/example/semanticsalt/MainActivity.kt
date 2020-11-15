@@ -1,116 +1,86 @@
 package com.example.semanticsalt
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.text.DecimalFormat
-import java.util.*
 
 class MainActivity : AppCompatActivity() {
-
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var spEditor: SharedPreferences.Editor
+    private val df = DecimalFormat("#,###")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        hi.text = randomQuote()
-        cost.setOnEditorActionListener { v: TextView?, actionId: Int, event: KeyEvent? ->
-            if (event != null && event.keyCode == KeyEvent.KEYCODE_ENTER || actionId == EditorInfo.IME_ACTION_DONE) {
-                //do what you want on the press of 'done'
-                runCalculation.performClick()
+        //init share pref
+        sharedPreferences = getSharedPreferences("USER_INFO_SP", Context.MODE_PRIVATE)
+        //set data to views
+        theCount.text = sharedPreferences.getInt("PUSH_UP_COUNT", 0).toString()
+        customEntry.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                doSomeMath(v)
+                return@OnKeyListener true
             }
             false
-        }
+        })
+
     }
-    fun doSomethingMathish(v: View) {
-        closeKeyboard()
-        val id = v.id
-        if (id == R.id.reset) {
-            qty.setText("")
-            cost.setText("")
-            costLine.text = ""
-            costLine2.text = ""
-        } else if (id == R.id.runCalculation) {
-            val totalQtyString = qty.text.toString()
-            val totalCostString = cost.text.toString()
-            if (totalQtyString.isBlank() && totalQtyString.isBlank()) {
-                Toast.makeText(this, "You did not enter anything at all..", Toast.LENGTH_SHORT).show()
-                return
-            } else if (totalQtyString.isBlank()) {
-                Toast.makeText(this, "You did not enter a quantity", Toast.LENGTH_SHORT).show()
-                return
-            } else if (totalCostString.isBlank()) {
-                Toast.makeText(this, "You did not enter a cost", Toast.LENGTH_SHORT).show()
-                return
+    private fun closeKeyboard(v: View) {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+        imm?.hideSoftInputFromWindow(v.windowToken, 0)
+    }
+    fun doSomeMath(v: View) {
+        when (v.id) {
+            R.id.reset -> {
+                val i = 0
+                spEditor = sharedPreferences.edit()
+                spEditor.putInt("PUSH_UP_COUNT", i)
+                spEditor.apply()
+                theCount.text = sharedPreferences.getInt("PUSH_UP_COUNT", 0).toString()
             }
-            hi.text = randomQuote()
-            val totalQty = totalQtyString.toDouble()
-            val totalCost = totalCostString.toDouble()
-            val itemCost = totalCost / totalQty
-            val roundedCost = roundThreeDecimals(itemCost)
-            val oneLess = roundNoDecimals(totalQty) - 1
-            val oneLessInt = roundNoDecimals(oneLess).toInt()
-            val allButOne = roundedCost * oneLess
-            val finalItem = roundThreeDecimals(totalCost - allButOne)
-            val itemCostString = roundedCost.toString() + " X " + roundNoDecimals(oneLessInt.toDouble()).toInt()
-            val finalItemString = roundThreeDecimals(finalItem).toString() + " X 1"
-            when {
-                finalItem == roundedCost -> {
-                    val allCostString = roundTwoDecimals(roundedCost) + " X " + roundNoDecimals(totalQty).toInt()
-                    costLine.text = allCostString
-                    costLine2.text = getString(R.string.tooEasy)
-                }
-                roundThreeDecimals(roundedCost * oneLess + roundThreeDecimals(finalItem)) == roundThreeDecimals(totalCost) -> {
-                    Log.d("totalQtyString", totalQtyString)
-                    Log.d("totalCostString", totalCostString)
-                    Log.d("totalQtyDouble", totalQty.toString())
-                    Log.d("costTotalDouble", totalCost.toString())
-                    Log.d("costItemDouble", itemCost.toString())
-                    costLine.text = itemCostString
-                    costLine2.text = finalItemString
-                }
-                else -> {
-                    val errorString = roundTwoDecimals(roundedCost * oneLess + finalItem) + " in not = to " + roundTwoDecimals(totalCost)
-                    costLine.text = getString(R.string.errorWarning)
-                    costLine2.text = errorString
-                }
+            R.id.add10 -> {
+                var g: Int = sharedPreferences.getInt("PUSH_UP_COUNT", 0)
+                spEditor = sharedPreferences.edit()
+                g += 10
+                spEditor.putInt("PUSH_UP_COUNT", g)
+                spEditor.apply()
+                theCount.text = df.format(sharedPreferences.getInt("PUSH_UP_COUNT", 0)).toString()
+            }
+            R.id.mainLayout -> {
+                closeKeyboard(v)
+                var g: Int = sharedPreferences.getInt("PUSH_UP_COUNT", 0)
+                spEditor = sharedPreferences.edit()
+                g += 1
+                spEditor.putInt("PUSH_UP_COUNT", g)
+                spEditor.apply()
+                theCount.text = df.format(sharedPreferences.getInt("PUSH_UP_COUNT", 0)).toString()
+
+            }
+            R.id.customEntry -> {
+                closeKeyboard(v)
+                var g: Int = sharedPreferences.getInt("PUSH_UP_COUNT", 0)
+                spEditor = sharedPreferences.edit()
+                if (!customEntry.text.toString().isBlank()) {
+                    g += customEntry.text.toString().toInt()
+                    spEditor.putInt("PUSH_UP_COUNT", g)
+                    spEditor.apply()
+                    theCount.text = df.format(sharedPreferences.getInt("PUSH_UP_COUNT", 0)).toString()}
+            }
+            R.id.enterCustomButton -> {
+                closeKeyboard(v)
+                var g: Int = sharedPreferences.getInt("PUSH_UP_COUNT", 0)
+                spEditor = sharedPreferences.edit()
+                if (!customEntry.text.toString().isBlank()) {
+                    g += customEntry.text.toString().toInt()
+                    spEditor.putInt("PUSH_UP_COUNT", g)
+                    spEditor.apply()
+                    theCount.text = df.format(sharedPreferences.getInt("PUSH_UP_COUNT", 0)).toString()}
             }
         }
     }
-
-    private fun roundNoDecimals(d: Double): Double {
-        val oneDForm = DecimalFormat("#")
-        return oneDForm.format(d).toDouble()
-    }
-
-    private fun roundTwoDecimals(d: Double): String {
-        val twoDForm = DecimalFormat("$#,##0.00")
-        return twoDForm.format(d)
-    }
-
-    private fun roundThreeDecimals(d: Double): Double {
-        val threeDForm = DecimalFormat("#.###")
-        return threeDForm.format(d).toDouble()
-    }
-
-    private fun closeKeyboard() {
-        try {
-            val editTextInput = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-            editTextInput.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-        } catch (e: Exception) {
-            Log.e("AndroidView", "closeKeyboard: $e")
-        }
-    }
-
-    private fun randomQuote(): String? {
-        val res = resources
-        val greetingArray = res.getStringArray(R.array.greetings)
-        return greetingArray[Random().nextInt(greetingArray.size)]
-    }
-
 }
